@@ -118,7 +118,7 @@ install -d %{buildroot}%{_initrddir}
 mv %{buildroot}%{_sysconfdir}/init.d/chilli %{buildroot}%{_initrddir}/chilli
 
 install -d %{buildroot}%{py_puresitedir}/CoovaChilli
-mv %{buildroot}%{_libdir}/python/CoovaChilli.py %{buildroot}%{py_puresitedir}/CoovaChilli/
+mv %{buildroot}%{_libdir}/python/CoovaChilliLib.py %{buildroot}%{py_puresitedir}/CoovaChilli/
 
 %post
 %_post_service chilli
