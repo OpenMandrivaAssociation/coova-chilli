@@ -1,11 +1,13 @@
+%define _disable_ld_no_undefined 1
+
 %define	major 0
 %define libname	%mklibname chilli %{major}
 %define develname %mklibname -d chilli
 
 Summary:	Wireless LAN Access Point Controller
 Name:		coova-chilli
-Version:	1.0.13
-Release:	%mkrel 2
+Version:	1.2.1
+Release:	%mkrel 1
 License:	GPLv2
 Group:		System/Servers
 URL:		http://coova.org/wiki/index.php/CoovaChilli
@@ -13,8 +15,12 @@ Source0:	http://ap.coova.org/chilli/%{name}-%{version}.tar.gz
 Patch0:		coova-chilli-1.0.12-linkage_fix.diff
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
+Requires:	python-coova-chilli
 BuildRequires:	autoconf
 BuildRequires:	libtool
+BuildRequires:	curl-devel
+BuildRequires:	openssl-devel
+BuildRequires:	pcap-devel
 Provides:	chillispot = %{version}-%{release}
 Obsoletes:	chillispot
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -61,6 +67,14 @@ http://www.chillispot.org/.
 
 This package contains the static %{name} library and its header files.
 
+%package -n	python-coova-chilli
+Summary:	CoovaChilli Python Library
+Group:		Development/Python
+BuildArch:	noarch
+
+%description -n	python-coova-chilli
+CoovaChilli Python Library
+
 %prep
 
 %setup -q -n %{name}-%{version}
@@ -70,18 +84,26 @@ This package contains the static %{name} library and its header files.
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
 find . -type f -perm 0444 -exec chmod 644 {} \;
-		
+
 # cleanup cvs junk
 for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
 %build
-autoreconf -fis
+autoreconf -fi
 %serverbuild
 
 %configure2_5x \
-    --enable-static-exec
+    --enable-static-exec \
+    --enable-miniportal \
+    --enable-chilliredir \
+    --enable-chilliproxy \
+    --enable-largelimits \
+    --with-mmap \
+    --with-openssl \
+    --with-pcap \
+    --with-curl
 
 %make
 
@@ -92,6 +114,9 @@ rm -rf %{buildroot}
 
 install -d %{buildroot}%{_initrddir}
 mv %{buildroot}%{_sysconfdir}/init.d/chilli %{buildroot}%{_initrddir}/chilli
+
+install -d %{buildroot}%{py_puresitedir}
+mv %{buildroot}%{_libdir}/python/CoovaChilliLib.py %{buildroot}%{py_puresitedir}/
 
 %post
 %_post_service chilli
@@ -116,6 +141,7 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_initrddir}/chilli
 %attr(0644,root,root) %config %{_sysconfdir}/chilli.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/chilli/defaults
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/chilli/gui-config-default.ini
 %dir %{_sysconfdir}/chilli
 %dir %{_sysconfdir}/chilli/www
 %attr(0755,root,root) %{_sysconfdir}/chilli/www/config.sh
@@ -124,10 +150,12 @@ rm -rf %{buildroot}
 %{_sysconfdir}/chilli/functions
 %{_sysconfdir}/chilli/*.sh
 %attr(0755,root,root) %{_sbindir}/chilli
+%attr(0755,root,root) %{_sbindir}/chilli_opt
+%attr(0755,root,root) %{_sbindir}/chilli_proxy
 %attr(0755,root,root) %{_sbindir}/chilli_query
 %attr(0755,root,root) %{_sbindir}/chilli_radconfig
+%attr(0755,root,root) %{_sbindir}/chilli_redir
 %attr(0755,root,root) %{_sbindir}/chilli_response
-%attr(0755,root,root) %{_sbindir}/test_radius
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 %{_mandir}/man8/*.8*
@@ -139,6 +167,8 @@ rm -rf %{buildroot}
 %files -n %{develname}
 %defattr(-,root,root)
 %{_libdir}/*.so
-%{_libdir}/*.a
-%{_libdir}/*.la
+%{_libdir}/*.*a
 
+%files -n python-coova-chilli
+%defattr(-,root,root,0755)
+%{py_puresitedir}/CoovaChilliLib.py
