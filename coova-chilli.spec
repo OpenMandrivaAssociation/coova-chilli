@@ -21,6 +21,7 @@ BuildRequires:	libtool
 BuildRequires:	curl-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pcap-devel
+BuildRequires:	python-devel
 Provides:	chillispot = %{version}-%{release}
 Obsoletes:	chillispot
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
