@@ -7,7 +7,7 @@
 Summary:	Wireless LAN Access Point Controller
 Name:		coova-chilli
 Version:	1.2.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	GPLv2
 Group:		System/Servers
 URL:		http://coova.org/wiki/index.php/CoovaChilli
