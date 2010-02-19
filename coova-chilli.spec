@@ -7,7 +7,7 @@
 Summary:	Wireless LAN Access Point Controller
 Name:		coova-chilli
 Version:	1.2.1
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	GPLv2
 Group:		System/Servers
 URL:		http://coova.org/wiki/index.php/CoovaChilli
@@ -72,13 +72,12 @@ This package contains the static %{name} library and its header files.
 %package -n	python-coova-chilli
 Summary:	CoovaChilli Python Library
 Group:		Development/Python
-BuildArch:	noarch
+Obsoletes:	python-coova-chilli < %{version}-%{release}
 
 %description -n	python-coova-chilli
 CoovaChilli Python Library
 
 %prep
-
 %setup -q -n %{name}-%{version}
 %patch0 -p0
 
