@@ -1,0 +1,40 @@
+--- src/Makefile.am	2009-12-18 06:37:55.000000000 +0100
++++ src/Makefile.am.oden	2010-02-02 11:33:13.778010837 +0100
+@@ -13,6 +13,8 @@
+ chksum.c net.h net.c ms_chap.c options.c statusfile.c \
+ conn.h conn.c 
+ 
++libchilli_la_LIBADD = $(top_builddir)/bstring/libbstring.la
++
+ AM_CFLAGS = -D_GNU_SOURCE -Wall -fno-builtin -fno-strict-aliasing \
+   -O2 -fomit-frame-pointer -funroll-loops -pipe \
+  -DDEFCHILLICONF='"$(sysconfdir)/chilli.conf"'\
+@@ -35,17 +37,20 @@
+ 
+ if WITH_OPENSSL
+ LDADD += ${LIBSSL}
++libchilli_la_LIBADD += ${LIBSSL}
+ endif
+ 
+ if WITH_MATRIXSSL
+ libchilli_la_SOURCES += matrixssl.c matrixssl.h
+ #LDADD += ${LIBSSL}
+ LDADD += -lmatrixssl
++libchilli_la_LIBADD += -lmatrixssl
+ endif
+ 
+ if WITH_NETFILTER_QUEUE
+ libchilli_la_SOURCES += queue.c
+ LDADD += ${LIBNETFILTER_QUEUE}
++libchilli_la_LIBADD += ${LIBNETFILTER_QUEUE}
+ endif
+ 
+ # add -pg to enable gprof
+@@ -55,6 +60,7 @@
+ 
+ if WITH_PCAP
+ LDADD += ${LIBPCAP}
++libchilli_la_LIBADD += ${LIBPCAP}
+ endif
+ 
+ if WITH_RTMON
