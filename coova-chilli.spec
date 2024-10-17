@@ -10,7 +10,7 @@ Version:	1.2.1
 Release:	%mkrel 6
 License:	GPLv2
 Group:		System/Servers
-URL:		http://coova.org/wiki/index.php/CoovaChilli
+URL:		https://coova.org/wiki/index.php/CoovaChilli
 Source0:	http://ap.coova.org/chilli/%{name}-%{version}.tar.gz
 Patch0:		coova-chilli-1.0.12-linkage_fix.diff
 Requires(pre): rpm-helper
