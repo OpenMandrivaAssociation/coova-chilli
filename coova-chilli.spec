@@ -16,6 +16,10 @@ Patch0:		coova-chilli-1.0.12-linkage_fix.diff
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 Requires:	python-coova-chilli
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	autoconf
 BuildRequires:	libtool
 BuildRequires:	curl-devel
